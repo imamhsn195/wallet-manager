@@ -8,11 +8,11 @@ class MenuSectionItem extends StatelessWidget {
     Key? key,
   }) : super(key: key);
   final String title;
-  final Icon icon;
+  final IconData icon;
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: icon,
+      leading: Icon(icon, color: Colors.black,),
       title: Text(title),
       onTap: () {
         Navigator.pop(context);

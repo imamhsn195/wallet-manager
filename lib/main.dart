@@ -1,58 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:wallet_manager/constants.dart';
-
-
+import 'package:wallet_manager/components/menu_section_title.dart';
+import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'components/menu_section_item.dart';
-
 void main() {
   runApp(const MyApp());
 }
-
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Wallet Manager',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Welcome Page'),
+      home: const MyHomePage(title: 'Wallet Manager'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-
+class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin{
+  late Animation<double> _animation;
+  late AnimationController _animationController;
+  bool isShowing = false;
+  @override
+  void initState(){
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 260),
+    );
+    final curvedAnimation = CurvedAnimation(curve: Curves.easeInOut, parent: _animationController);
+    _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
+    super.initState();
+    _animationController.addStatusListener((status) {
+      // print(status);
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,7 +54,9 @@ class _MyHomePageState extends State<MyHomePage> {
         // in the middle of the parent.
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children:const [],
+          children: const [
+            Text("Welcome Page")
+          ],
         ),
       ),
       drawer: Drawer(
@@ -79,7 +71,8 @@ class _MyHomePageState extends State<MyHomePage> {
               decoration: const BoxDecoration(
                 color: Colors.blueAccent,
               ),
-              child: Column(
+              child:
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
@@ -104,84 +97,124 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
             ),
-
             Column(
               children: const [
                 MenuSectionTitle( title: "Status"),
-                MenuSectionItem(
-                    icon: Icon(Icons.account_balance_wallet_outlined, color: Colors.black,),
-                    title: "My Wallet Status"
-                ),
-                MenuSectionItem(
-                    icon: Icon(Icons.account_balance, color: Colors.black,),
-                    title: "My Income Status"
-                ),
-                MenuSectionItem(
-                    title: "My Expense Status",
-                    icon: Icon(Icons.add_shopping_cart,color: Colors.black,),),
-                MenuSectionItem(
-                    title: "Day History",
-                    icon: Icon(Icons.calendar_month, color: Colors.black,)
-                ),
+                MenuSectionItem( icon: Icons.account_balance_wallet_outlined, title: "My Wallet Status"),
+                MenuSectionItem( icon: Icons.account_balance, title: "My Income Status"),
+                MenuSectionItem( title: "My Expense Status", icon: Icons.add_shopping_cart),
+                MenuSectionItem(title: "Day History",icon: Icons.calendar_month),
                 Divider(thickness: 1.0, color: Colors.grey)
               ],
             ),
             Column(
               children:const [
                 MenuSectionTitle(title: "Mobile Storage Backup"),
-                MenuSectionItem(title: "Back Up Mobile", icon: Icon(Icons.cloud_done_outlined, color: Colors.black,)),
-                MenuSectionItem(title: "Restore Backup", icon: Icon(Icons.cloud_download, color: Colors.black,),),
+                MenuSectionItem(title: "Back Up Mobile", icon: Icons.cloud_done_outlined),
+                MenuSectionItem(title: "Restore Backup", icon: Icons.cloud_download),
                 Divider(thickness: 1.0, color: Colors.grey)
               ],
             ),
             Column(
               children: const [
                 MenuSectionTitle(title: "Google Drive"),
-                MenuSectionItem(title: "Sign Out", icon: Icon(Icons.logout, color: Colors.black,)),
-                MenuSectionItem(title: "Backup to Drive", icon: Icon(Icons.cloud_done_outlined, color: Colors.black,)),
-                MenuSectionItem(title: "Restore from Drive", icon: Icon(Icons.sync, color: Colors.black,)),
+                MenuSectionItem(title: "Sign Out", icon: Icons.logout),
+                MenuSectionItem(title: "Backup to Drive", icon: Icons.cloud_done_outlined),
+                MenuSectionItem(title: "Restore from Drive", icon: Icons.sync),
                 Divider(thickness: 1.0, color: Colors.grey)
               ],
             ),
             Column(
               children: const[
                 MenuSectionTitle(title: "Settings"),
-                MenuSectionItem(title: "Create Password", icon: Icon(Icons.logout, color: Colors.black,)),
-                MenuSectionItem(title: "Language", icon: Icon(Icons.language, color: Colors.black,)),
+                MenuSectionItem(title: "Create Password", icon: Icons.logout),
+                MenuSectionItem(title: "Language", icon: Icons.language),
                 Divider(thickness: 1.0, color: Colors.grey)
               ],
             ),
             Column(
               children: const[
                 MenuSectionTitle(title: "Application"),
-                MenuSectionItem(title: "User Guide", icon: Icon(Icons.file_copy, color: Colors.black,)),
-                MenuSectionItem(title: "Share App", icon: Icon(Icons.share, color: Colors.black,)),
-                MenuSectionItem(title: "Top Apps", icon: Icon(Icons.shopping_cart, color: Colors.black,)),
-                MenuSectionItem(title: "Privacy Policy", icon: Icon(Icons.lock, color: Colors.black,)),
-                MenuSectionItem(title: "About", icon: Icon(Icons.contact_mail_rounded, color: Colors.black,)),
+                MenuSectionItem(title: "User Guide", icon: Icons.file_copy),
+                MenuSectionItem(title: "Share App", icon: Icons.share),
+                MenuSectionItem(title: "Top Apps", icon: Icons.shopping_cart),
+                MenuSectionItem(title: "Privacy Policy", icon: Icons.lock),
+                MenuSectionItem(title: "About", icon: Icons.contact_mail_rounded),
                 Divider(thickness: 1.0, color: Colors.grey)
               ],
             )
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){},
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+        floatingActionButtonLocation: FloatingActionButtonLocation.miniEndDocked,
+
+        //Init Floating Action Bubble
+        floatingActionButton: FloatingActionBubble(
+          // Menu items
+          items: <Bubble>[
+            // Floating action menu item
+            Bubble(
+              title:"Expenses",
+              iconColor :Colors.white,
+              bubbleColor : Colors.redAccent,
+              icon:Icons.remove,
+              titleStyle:const TextStyle(fontSize: 16 , color: Colors.white),
+              onPress: () {
+                _animationController.reverse();
+              },
+            ),
+            // Floating action menu item
+            Bubble(
+              title:"Income",
+              iconColor :Colors.white,
+              bubbleColor : Colors.green,
+              icon:Icons.add,
+              titleStyle: const TextStyle(fontSize: 16 , color: Colors.white),
+              onPress: () {
+                _animationController.reverse();
+              },
+            ),
+            //Floating action menu item
+            Bubble(
+              title:"Transfer",
+              iconColor :Colors.white,
+              bubbleColor : Colors.blue,
+              icon:Icons.sync_alt,
+              titleStyle: const TextStyle(fontSize: 16 , color: Colors.white),
+              onPress: () {
+                // Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) => Homepage()));
+                _animationController.reverse();
+              },
+            ),
+          ],
+
+          // animation controller
+          animation: _animation,
+
+          // On pressed change animation state
+          onPress: ()
+          {
+            _animationController.isCompleted
+                ? _animationController.reverse()
+                : _animationController.forward();
+            setState((){
+              isShowing = !isShowing;
+            });
+          },
+
+          // Floating Action button Icon color
+          iconColor: Colors.white,
+
+          // Floating Action button Icon
+          iconData: isShowing ? Icons.add : Icons.remove,
+
+          backGroundColor: Colors.blue,
+        )
     );
   }
-}
 
-class MenuSectionTitle extends StatelessWidget {
-  const MenuSectionTitle({
-    required this.title,
-    Key? key,
-  }) : super(key: key);
-  final String title;
   @override
-  Widget build(BuildContext context) {
-    return Text( title, style: kMenuItemIconStyle, textAlign: TextAlign.left,);
+  void dispose() {
+    _animationController.dispose();
   }
 }
