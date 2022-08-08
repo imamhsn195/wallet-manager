@@ -80,7 +80,7 @@ class _FloatingActionsState extends State<FloatingActions> with SingleTickerProv
       iconColor: Colors.white,
       // Floating Action button Icon
       iconData: isShowing ? Icons.keyboard_arrow_left_sharp : Icons.add,
-      backGroundColor: Colors.blue,
+      backGroundColor: Colors.blueGrey,
     );
   }
 
